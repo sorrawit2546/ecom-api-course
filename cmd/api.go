@@ -8,12 +8,15 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/jackc/pgx/v5"
+	repository "github.com/sorrawit2546/internal/adapters/postgresql/sqlc"
 	"github.com/sorrawit2546/internal/products"
 )
 
 //application
 type application struct {
 	config	config
+	db		*pgx.Conn
 }
 //config
 type config struct {
@@ -41,7 +44,7 @@ func (app *application) mount() http.Handler {
       	json.NewEncoder(w).Encode(map[string]string{"Status":"OK!"})
 	})
 
-	productService := products.NewService(nil)
+	productService := products.NewService(*repository.New(app.db))
 	productHandler := products.NewHandler(productService)
 	r.Get("/products", productHandler.ListProducts)
 	

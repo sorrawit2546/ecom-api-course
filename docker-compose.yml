@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16 # Use a specific version of the official image
+    container_name: ecom-postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: mysecretpassword # Required for the image to run
+      POSTGRES_USER: myuser # Optional: sets up a different user
+      POSTGRES_DB: mydatabase # Optional: defines a default database
+    ports:
+      - "5432:5432" # Maps port 5432 on the host to the container
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Persists data to a named volume
+
+  pgadmin:
+    image: dpage/pgadmin4:latest # Use the official pgAdmin image
+    container_name: pgadmin_container
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: adminpassword
+    ports:
+      - "5050:80" # Access pgAdmin on http://localhost:5050
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
+  pgadmin:
