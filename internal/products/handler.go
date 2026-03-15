@@ -29,19 +29,12 @@ func NewHandler(service IService) *handler {
 // create ListProduct
 func (h *handler) ListProducts(w http.ResponseWriter, r *http.Request) {
 	//call service
-	err := h.service.ListProducts(r.Context())
+	products, err := h.service.ListProducts(r.Context())
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return 
 	}
-	pList := []Products{
-		{
-			1, "Banana Baot", 345.67,
-		},
-		{
-			2, "Cerave", 123.34,
-		},
-	}
-	json.Write(w, http.StatusOK, pList)
+	
+	json.Write(w, http.StatusOK, products)
 }

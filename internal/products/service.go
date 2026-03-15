@@ -7,7 +7,7 @@ import (
 )
 
 type IService interface {
-	ListProducts(ctx context.Context) error
+	ListProducts(ctx context.Context) ([]repository.Product, error)
 }
 
 type service struct {
@@ -20,10 +20,10 @@ func NewService(r repository.Queries) *service {
 	}
 }
 
-func (s *service) ListProducts(ctx context.Context) error {
-	_, err := s.repository.ListProducts(ctx)
+func (s *service) ListProducts(ctx context.Context) ([]repository.Product, error) {
+	products, err := s.repository.ListProducts(ctx)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return products, nil
 }
