@@ -2,7 +2,7 @@
 CREATE TABLE IF NOT EXISTS orders (
     id BIGSERIAL PRIMARY KEY,
     customer_id BIGINT NOT NULL,
-    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMPTZ DEFAULT now()
 );
 
 CREATE TABLE IF NOT EXISTS order_items (
@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS order_items (
     quantity INTEGER NOT NULL,
     price_cents INTEGER NOT NULL,
     CONSTRAINT fk_order FOREIGN KEY (order_id) REFERENCES orders(id)
-)
+);
 
 -- +goose Down
 DROP TABLE IF EXISTS order_items;
